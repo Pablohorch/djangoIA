@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- Importar css de la carpeta styles/login.css-->
+   <link rel="stylesheet" href="{% static '/css/login.css' %} ">
+</head>
+<body style="font-family: Arial, sans-serif;">
+<h1>Mi aplicacion</h1>
+<!-- Formulario de inicio de sesion en DJango para ususario con nombreUsuario y contrasenia , en un reguadro gris claro
+ en cada elemento habra una separacion de una linea , el texto de los label estaran en negritas y cada elemento estara Justificado -->
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <fieldset style="background-color: #e6e6e6">
+        <legend>Inicio de sesion</legend>
+        <p>
+            <label for="id_username">Nombre de usuario:</label>
+            <input type="text" name="username" maxlength="150" required id="id_username">
+        </p>
+        <p>
+            <label for="id_password">Contraseña:</label>
+            <input type="password" name="password" required id="id_password">
+        </p>
+        <p>
+            <!-- Mensaje de error de login imprimido de request-->
+            {% if error %}
+                <p style="color: red">{{ error }}</p>
+            {% endif %}
+            <!-- Boton de inicio de sesion -->
+            <input type="submit" value="Iniciar sesion">
+        </p>
+    </fieldset>
+</form>
+
+</body>
+</html>

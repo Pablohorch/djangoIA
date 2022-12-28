@@ -1,0 +1,46 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Home</title>
+      <link rel="stylesheet" href="{% static '/css/home.css' %} ">
+   </head>
+   <body>
+      <!-- Bienvenida con el nombre el usuario almacenado en la sesioncomo username y boton de cerrar sesion -->
+      <div class="well">
+         <h1>Bienvenido {{ username.nombre }} </h1>
+         <a class="logout-button" href="{% url 'logout' %}">Cerrar Sesion</a>
+      </div>
+      <div>
+         <table>
+            <thead>
+               <tr>
+                    <th>Hábitos</th>
+                    <th>Acción</th>
+                    <th>Media Actual</th>
+                    <th>Unidad de registro</th>
+                    <th>Unidad de media</th>
+                    <th>Unidad de registro</th>
+                    <th>Unidad de revision</th>
+                    <th>Proceso</th>
+                    <th>Registro</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for habit in habits %}
+               <tr>
+                  <td>{{ habit.name }}</td>
+                  <td>{{ habit.action }}</td>
+                  <td>{{ habit.current_average }}</td>
+                  <td>{{ habit.unit_of_current_average }}</td>
+                  <td>{{ habit.unit_of_register }}</td>
+                  <td>{{ habit.unit_of_revision }}</td>
+                  <td>{{ habit.process }}</td>
+                  <td>{{ habit.register }}</td>
+               </tr>
+               {% endfor %}
+            <tbody>
+         </table>
+      </div>
+   </body>
+</html>
