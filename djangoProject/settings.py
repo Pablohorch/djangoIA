@@ -131,5 +131,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
+APPEND_SLASH = False
 
 

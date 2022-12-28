@@ -6,13 +6,18 @@
       <link rel="stylesheet" href="{% static '/css/home.css' %} ">
    </head>
    <body>
+   <!-- h2 verde que imprime la variable guardado-->
+        <h2> {{guardado}} </h2>
       <!-- Bienvenida con el nombre el usuario almacenado en la sesioncomo username y boton de cerrar sesion -->
       <div class="well">
          <h1>Bienvenido {{ username.nombre }} </h1>
          <a class="logout-button" href="{% url 'logout' %}">Cerrar Sesion</a>
       </div>
+        <!-- Boton para crear un nuevo habito-->
+        <button onclick="addRow()">Crear hábito</button>
+
       <div>
-         <table>
+         <table id="habitos-table">
             <thead>
                <tr>
                     <th>Hábitos</th>
@@ -27,20 +32,49 @@
                </tr>
             </thead>
             <tbody>
-               {% for habit in habits %}
-               <tr>
-                  <td>{{ habit.name }}</td>
-                  <td>{{ habit.action }}</td>
-                  <td>{{ habit.current_average }}</td>
-                  <td>{{ habit.unit_of_current_average }}</td>
-                  <td>{{ habit.unit_of_register }}</td>
-                  <td>{{ habit.unit_of_revision }}</td>
-                  <td>{{ habit.process }}</td>
-                  <td>{{ habit.register }}</td>
-               </tr>
-               {% endfor %}
+
             <tbody>
          </table>
       </div>
+   <!-- Etiqueta script -->
+    <script>
+
+        // Crear un array con los ids de los inputs
+        var inputIds = ['habito', 'accion', 'media-actual', 'unidad-registro', 'unidad-media', 'unidad-revision', 'proceso', 'registro'];
+
+
+        function addRow() {
+          // Obtener la tabla donde se agregará la fila
+          var table = document.getElementById('habitos-table');
+
+          // Crear una nueva fila
+          var row = table.insertRow(-1);
+
+
+          // Recorrer el array de ids
+          inputIds.forEach((inputId, index) => {
+            // Crear la celda
+            var cell = row.insertCell(index);
+            // Asignar el contenido de la celda
+            cell.innerHTML = `<input type="text" id="${inputId}-input">`;
+          });
+
+          // Crear la última celda con el botón de guardar
+          var cell = row.insertCell(inputIds.length);
+          cell.innerHTML = '{% csrf_token %} <button onclick="saveRow()">Guardar</button>';
+        }
+
+        function saveRow() {
+            // Crear un objeto con los valores de los inputs usando el array de ids
+            var habit = {};
+            inputIds.forEach((inputId, index) => {
+              habit[inputId] = document.getElementById(`${inputId}-input`).value;
+            });
+
+            // redireccionar a la vista de guardar habitos pasando el json como parametro
+            window.location.href = `/newHabito/?habit=${JSON.stringify(habit)}`;
+        }
+    </script>
+
    </body>
 </html>

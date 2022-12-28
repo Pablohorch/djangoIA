@@ -68,3 +68,7 @@ def logout_view(request):
         del request.session['user']
     # redirecciona a la pagina de login
     return redirect('login')
+
+
+def new_habito_view(request):
+    return render(request, 'home.html', {'guardado': 'Habito guardado'})
