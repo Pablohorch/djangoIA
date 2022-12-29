@@ -43,6 +43,10 @@
                     <!-- Boton para eliminar el habito llamando a deleteRow-->
                     <button class="deleteHabit" onclick="deleteRow({{ habit.idHabito }})">Eliminar</button>
                     </td>
+                    <td>
+                    <!-- Boton para registrar el habito llamando a addRow-->
+                    <button class="addHabit" onclick="addAccion({{ habit.idHabito }} ,this)">Registrar</button>
+                    </td>
                 </tr>
                 {% endfor %}
             <tbody>
@@ -54,6 +58,27 @@
         // Crear un array con los ids de los inputs
         var inputIds = ['habito', 'accion', 'mediaActual', 'unidadRegistro', 'unidadMedia', 'unidadRevision', 'proceso'];
 
+
+        // Funcion para registrar una accion en un habito
+        function addAccion(idHabito,button){
+            // Obtener la celda de la fila donde se encuentra el botón
+            var cell = button.parentNode;
+
+            // Modificar el contenido de la celda
+            cell.innerHTML = '<input type="text" id="process-input"><button onclick="saveProcess('+idHabito+',this)">Guardar</button>';
+        }
+
+        // Funcion para guardar el proceso
+        function saveProcess(idHabito,button){
+            // Obtener la celda de la fila donde se encuentra el botón
+            var cell = button.parentNode;
+
+            // Obtener el valor del input
+            var process = document.getElementById('process-input').value;
+
+            // crea un alert con el valor del input
+            alert(process);
+        }
 
         function addRow() {
           // Obtener la tabla donde se agregará la fila
