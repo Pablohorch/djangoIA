@@ -1,9 +1,9 @@
 import json
 
-import pymysql
 from django.shortcuts import render, redirect
 
 from djangoProject.Repository import userRepository
+from djangoProject.modelos.Habitos import Habitos
 from djangoProject.modelos.Usuario import Usuario
 
 
@@ -47,13 +47,11 @@ def login_view(request):
 
 
 def home_view(request):
-    #Obtener nombre del objecto user de la sesión
+    # Obtener nombre del objecto user de la sesión
     username = json.loads(request.session['user'])
 
-
     # validar si el usuario existe en la sesión y que el user.nombre no sea vacio
-    if 'user' in request.session  and username:
-
+    if 'user' in request.session and username:
         # si existe redirecciona a la pagina de home y envia el nombre del usuario
         return render(request, 'home.html', {'username': username})
 
@@ -71,4 +69,18 @@ def logout_view(request):
 
 
 def new_habito_view(request):
-    return render(request, 'home.html', {'guardado': 'Habito guardado'})
+    # validar si el usuario existe en la sesión
+    if 'user' in request.session:
+        inputIds = ['habito', 'accion', 'mediaActual', 'unidadRegistro', 'unidadMedia', 'unidadRevision', 'proceso']
+
+        # cargar el json de la request GET de habit
+        habit = json.loads(request.GET['habit'])
+        # con el objecto habit lo mapeas a objecto Habito
+        habitodto = Habitos(habit['habito'], habit['accion'], habit['mediaActual'], habit['unidadRegistro'],  habit['unidadMedia'], habit['unidadRevision'], habit['proceso'])
+        # Crea una lista donde solo tenga un elemento de habitoDTO
+        habitos = [habitodto]
+
+        # Pasar habit a la vista home para que se muestre en la tabla y mostrar el mensaje de exito
+        return render(request, 'home.html', {'habitos': habitos, 'success': 'Hábito creado con éxito'})
+
+
