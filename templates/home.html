@@ -39,7 +39,10 @@
                     <td>{{ habit.unidadRegistro }}</td>
                     <td>{{ habit.unidadMedia }}</td>
                     <td>{{ habit.unidadRevision }}</td>
-                    <td>{{ habit.proceso }}</td>
+                    <td>{{ habit.proceso }}
+                    <!-- Boton para eliminar el habito llamando a deleteRow-->
+                    <button class="deleteHabit" onclick="deleteRow({{ habit.idHabito }})">Eliminar</button>
+                    </td>
                 </tr>
                 {% endfor %}
             <tbody>
@@ -82,6 +85,11 @@
 
             // redireccionar a la vista de guardar habitos pasando el json como parametro
             window.location.href = `/newHabito/?habit=${JSON.stringify(habit)}`;
+        }
+
+        function deleteRow(id) {
+            // redireccionar a la vista de eliminar habitos pasando el id como parametro
+            window.location.href = `/deleteHabito/?id=${id}`;
         }
     </script>
 

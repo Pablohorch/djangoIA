@@ -23,6 +23,7 @@ urlpatterns = [
     path('home/', views.home_view, name='home'),
     path('logout/', views.logout_view, name='logout'),
     path('newHabito/', views.new_habito_view, name='new_habito'),
+    path('deleteHabito/', views.delete_habito_view, name='delete_habito'),
 
 
 ]

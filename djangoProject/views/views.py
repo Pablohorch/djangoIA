@@ -61,7 +61,7 @@ def home_view(request):
 
         # recorrer la lista de habitosSQL y crear un objecto Habitos con los datos de cada habito
         for habito in habitosSQL:
-            habitos.append(Habitos(habito[2], habito[3], habito[4], habito[5], habito[6], habito[7], habito[8]))
+            habitos.append(Habitos(habito[0],habito[2], habito[3], habito[4], habito[5], habito[6], habito[7], habito[8]))
 
         # pasar la lista de habitos a la vista home y username con variable user
         return render(request, 'home.html', {'habitos': habitos, 'username': user})
@@ -91,7 +91,7 @@ def new_habito_view(request):
         # cargar el json de la request GET de habit
         habit = json.loads(request.GET['habit'])
         # con el objecto habit lo mapeas a objecto Habito
-        habitodto = Habitos(habit['habito'], habit['accion'], habit['mediaActual'], habit['unidadRegistro'],  habit['unidadMedia'], habit['unidadRevision'], habit['proceso'])
+        habitodto = Habitos(0,habit['habito'], habit['accion'], habit['mediaActual'], habit['unidadRegistro'],  habit['unidadMedia'], habit['unidadRevision'], habit['proceso'])
 
         # guardar en la base de datos el objecto habitodto
         userRepository.save_habito(user['id'],habitodto)
@@ -99,5 +99,18 @@ def new_habito_view(request):
         # redirecciona a la pagina de home
         return redirect('home')
 
+def delete_habito_view(request):
+    # validar si el usuario existe en la sesión
+    if 'user' in request.session:
+        # guardar en variable el user del request
+        user = json.loads(request.session['user'])
 
+        # guardar en variable el id del habito a eliminar
+        id = request.GET['id']
+
+        # eliminar el habito de la base de datos
+        userRepository.delete_habito(id)
+
+        # redirecciona a la pagina de home
+        return redirect('home')
 

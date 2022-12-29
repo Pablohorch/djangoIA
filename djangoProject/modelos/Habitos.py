@@ -7,7 +7,8 @@ class Habitos():
         return self.habitos
 
     # Contructor de la clase
-    def __init__(self, habito, accion, mediaActual, unidadRegistro, unidadMedia, unidadRevision, proceso):
+    def __init__(self, idHabito, habito, accion, mediaActual, unidadRegistro, unidadMedia, unidadRevision, proceso):
+        self.idHabito = idHabito
         self.habito = habito
         self.accion = accion
         self.mediaActual = mediaActual

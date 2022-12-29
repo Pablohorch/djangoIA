@@ -83,3 +83,17 @@ def configSQL():
     return cnx, cursor
 
 
+def delete_habito(id):
+    cnx, cursor = configSQL()
+
+    # ejecuta la consulta DELETE
+    cursor.execute('DELETE FROM habitos WHERE id = %s', (id))
+
+    # guarda los cambios
+    cnx.commit()
+
+    # cierra la conexión
+    cnx.close()
+
+    # devuelve los resultados
+    return True
