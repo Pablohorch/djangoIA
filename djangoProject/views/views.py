@@ -33,8 +33,8 @@ def login_view(request):
         if not results:
             return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos'})
 
-        # crea una instancia de la clase Usuario con las variables username y password
-        user = Usuario(username, password, False)
+        # crea una instancia de la clase Usuario con los resultados de la consulta
+        user = Usuario(results[0][0], results[0][1], results[0][2], results[0][3])
 
         # guarda en la sesión el objeto user
         request.session['user'] = user.to_json()
@@ -48,12 +48,23 @@ def login_view(request):
 
 def home_view(request):
     # Obtener nombre del objecto user de la sesión
-    username = json.loads(request.session['user'])
+    user = json.loads(request.session['user'])
 
     # validar si el usuario existe en la sesión y que el user.nombre no sea vacio
-    if 'user' in request.session and username:
-        # si existe redirecciona a la pagina de home y envia el nombre del usuario
-        return render(request, 'home.html', {'username': username})
+    if 'user' in request.session and user:
+
+        # consultar la base de datos y obtener todos los habitos filtrando con el id del usuario
+        habitosSQL = userRepository.get_habitos(user['id'])
+
+        # crear una lista de habitos
+        habitos = []
+
+        # recorrer la lista de habitosSQL y crear un objecto Habitos con los datos de cada habito
+        for habito in habitosSQL:
+            habitos.append(Habitos(habito[2], habito[3], habito[4], habito[5], habito[6], habito[7], habito[8]))
+
+        # pasar la lista de habitos a la vista home y username con variable user
+        return render(request, 'home.html', {'habitos': habitos, 'username': user})
 
     # si no existe redirecciona a la pagina de login
     return redirect('login')
@@ -71,16 +82,22 @@ def logout_view(request):
 def new_habito_view(request):
     # validar si el usuario existe en la sesión
     if 'user' in request.session:
+        # guardar en variable el user del request
+        user = json.loads(request.session['user'])
+
+
         inputIds = ['habito', 'accion', 'mediaActual', 'unidadRegistro', 'unidadMedia', 'unidadRevision', 'proceso']
 
         # cargar el json de la request GET de habit
         habit = json.loads(request.GET['habit'])
         # con el objecto habit lo mapeas a objecto Habito
         habitodto = Habitos(habit['habito'], habit['accion'], habit['mediaActual'], habit['unidadRegistro'],  habit['unidadMedia'], habit['unidadRevision'], habit['proceso'])
-        # Crea una lista donde solo tenga un elemento de habitoDTO
-        habitos = [habitodto]
 
-        # Pasar habit a la vista home para que se muestre en la tabla y mostrar el mensaje de exito
-        return render(request, 'home.html', {'habitos': habitos, 'success': 'Hábito creado con éxito'})
+        # guardar en la base de datos el objecto habitodto
+        userRepository.save_habito(user['id'],habitodto)
+
+        # redirecciona a la pagina de home
+        return redirect('home')
+
 
 

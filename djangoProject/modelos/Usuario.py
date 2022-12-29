@@ -3,13 +3,14 @@ import json
 
 class Usuario:
 
-    def __init__(self, nombre, contrasenia, administrador):
+    def __init__(self, id,nombre, contrasenia, administrador):
+        self.id = id
         self.nombre = nombre
         self.contrasenia = contrasenia
         self.administrador = administrador
 
     def __str__(self):
-        return "nombre: " + self.nombre + " contrasenia: " + self.contrasenia + " administrador: " + str(self.administrador)
+        return "id:" + self.id + "nombre: " + self.nombre + " contrasenia: " + self.contrasenia + " administrador: " + str(self.administrador)
 
 #metodo to_json
     def to_json(self):

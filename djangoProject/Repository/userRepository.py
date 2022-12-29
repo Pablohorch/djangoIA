@@ -36,6 +36,40 @@ def get_user(username, password):
     # devuelve los resultados
     return results
 
+
+
+def save_habito(idUser,habitodto):
+    cnx, cursor = configSQL()
+
+    # ejecuta la consulta INSERT
+    cursor.execute('INSERT INTO '
+                   'habitos (idusuario,habito, accion, media_actual, unidad_registro, unidad_media, unidad_revision, proceso) '
+                   'VALUES (%s,%s, %s, %s, %s, %s, %s, %s)',
+                   (idUser,habitodto.habito, habitodto.accion, habitodto.mediaActual, habitodto.unidadRegistro, habitodto.unidadMedia, habitodto.unidadRevision, habitodto.proceso))
+
+    # guarda los cambios
+    cnx.commit()
+
+    # cierra la conexión
+    cnx.close()
+
+    # devuelve los resultados
+    return True
+
+def get_habitos(idUser):
+    cnx, cursor = configSQL()
+
+    # ejecuta la consulta SELECT
+    cursor.execute('SELECT * FROM habitos WHERE idusuario = %s', (idUser))
+
+    # obtiene los resultados
+    results = cursor.fetchall()
+
+    # cierra la conexión
+    cnx.close()
+
+    return results
+
 def configSQL():
     # lee la configuración del archivo config.ini
     config: ConfigParser = configparser.ConfigParser()
@@ -47,3 +81,5 @@ def configSQL():
     # crea un cursor
     cursor = cnx.cursor()
     return cnx, cursor
+
+
